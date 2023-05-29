@@ -1,25 +1,59 @@
 <template>
   <div class="background">
-    <img alt="Vue logo" src="../assets/beaver.png" width="150" style="padding-top: 200px;">
-    <h1 style="font-size: 70px; padding-top:40px; font-family:NanumSquareNeo; font-weight:700;"> 비버의 내 집 마련</h1>
-    <div class="daummap">
-      <div class ="row" style="padding-top: 20px;">
-        <div class="col-sm-3"></div>
-        <div class="col-sm">
-          <h3 style="font-family: NanumSquareNeo; font-weight: 300; padding-bottom: 10px;">직장 또는 학교의 주소를 입력해주세요!</h3>
-          <div class="input-group mb-3" style="height:50px">
-            <span class="input-group-text">주소</span>
-            <input type="text" class="form-control" style="background-color: rgba(255,255,255,0.2);">
-            <button class="input-group-text" @click="showApi">검색</button>
+    <div style="padding-top: 200px;text-align: center;"><img alt="logo" src="../assets/beaver.png" width="150"></div>
+    <h1 style="font-size: 70px; padding-top:40px; font-family:NanumSquareNeo; font-weight:700;text-align: center;"> 서울 비버의 내 집 마련</h1>
+      <div class ="row" style="padding-top: 20px;font-family: NanumSquareNeo; font-weight:500;padding-bottom: 10px;font-size: 20px;">
+        <div class="col-md-2"></div>
+        <div class="col-md">
+          <div class="hstack gap-3" style="padding-bottom:20px;">
+            <div class="daummap d-grid col-md-3 mx-auto">
+              <button type="button" class="btn btn-secondary btn-block" @click="showApi">직장/학교 주소 검색하기</button>
+            </div>
+            <span><font-awesome-icon icon="fa-solid fa-house" /></span>
+            <div class="d-grid col-md-2">
+              <input type="text" class="form-control" placeholder="우편번호" v-model="postcode" style="background-color: rgba(255,255,255,0.2);">
+            </div>
+            <div class="col-md">
+              <input type="text" class="form-control" placeholder="주소" v-model="address" style="background-color: rgba(255,255,255,0.2);">
+            </div>
+            <div ref="embed"></div>
+          </div>
+          <div class="container-fluid" style="padding:15px;background-color: rgba(234,234,234,0.6);text-align: center;">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <label class="form-check-label" for="inlineRadio1">단독다가구</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <label class="form-check-label" for="inlineRadio2">연립다세대</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+              <label class="form-check-label" for="inlineRadio3">오피스텔</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
+              <label class="form-check-label" for="inlineRadio4">아파트</label>
+            </div>
+            <div class="hstack gap-3" style="padding-top:10px">
+              <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ userdist }} 분 이하</label>
+              <input type="range" class="form-range" min="0" max = "180" step="10" id="distRange" v-model="userdist">
+            </div>
+            <div class="hstack gap-3">
+              <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(usersale) }} 만원 이하</label>
+              <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="usersale">
+            </div>
+            <div class="input-group mb-3">
+              <label for="areaRange" class="form-label col-md-3 mx-auto">건물 면적 (평)</label>
+              <input type="text" class="form-control" placeholder="최소 평수" >
+              <span class="input-group-text"> ~ </span>
+              <input type="text" class="form-control" placeholder="최대 평수">
+            </div>
           </div>
         </div>
-        <div class="col-sm-3"></div>
+        <div class="col-md-2"></div>
       </div>
-      <!-- <h1>우편번호: <span>{{ zip }}</span></h1>
-      <h1>기본주소: <span>{{ addr1 }}</span></h1> -->
-      <div ref="embed"></div>
-      <!-- <button @click="showApi">주소API 호출</button> -->
-    </div>
+    
   </div>
   
 </template>
@@ -36,13 +70,25 @@ export default {
 <script>
 export default {
   name: 'daumMap',
+
   data() {
     return {
-      zip: '',
-      addr1: '',
-      addr2: ''
+      postcode: '',
+      address: '',
+      userdist: 60,
+      usersale: 10000
     }
   },
+
+  computed: {
+            currency(){
+              return(v)=>{
+                return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              }
+              
+            },
+  },
+
   methods: {
     showApi() {
       new window.daum.Postcode({
@@ -73,8 +119,8 @@ export default {
             }
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            this.zip = data.zonecode; //5자리 새우편번호 사용
-            this.addr1 = fullRoadAddr;
+            this.postcode = data.zonecode; //5자리 새우편번호 사용
+            this.address = fullRoadAddr;
         }
       }).open()
     }
@@ -108,17 +154,4 @@ a {
   /* background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% ); */
 }
 
-.flex-container{
-  width: 100%;
-  height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
 </style>
