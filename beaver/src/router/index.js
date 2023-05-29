@@ -6,7 +6,7 @@ import HelloWorld from '../components/HelloWorld'
 
 // 라우터 설계
 const routes = [
-    { path: '/', component:HelloWorld},
+    { path: '/', component:HelloWorld}
 ]
 
 // 라우터 생성
