@@ -75,8 +75,8 @@ export default {
     return {
       postcode: '',
       address: '',
-      userdist: 60,
-      usersale: 10000
+      userdist: 0,
+      usersale: 1000
     }
   },
 
