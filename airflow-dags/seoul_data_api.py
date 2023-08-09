@@ -23,7 +23,7 @@ import pymysql
 
 API_KEY = Variable.get("SEOUL_TRANS_API")
 SEOUL_DATA_PATH = Variable.get("SEOUL_DATA_PATH")
-local_tz = pendulum.timezone("")
+local_tz = pendulum.timezone("Asia/Seoul")
 
 default_args = {
     'owner': 'sub',
