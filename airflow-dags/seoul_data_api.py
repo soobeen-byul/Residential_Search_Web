@@ -17,10 +17,13 @@ import csv
 import logging
 from airflow.operators.python import PythonOperator
 from airflow.providers.mysql.hooks.mysql import MySqlHook
+from sqlalchemy import create_engine
+import pymysql
 # from airflow.providers.mysql.operators.mysql import MySqlOperator, MySqlHook
 
 
 API_KEY = Variable.get("SEOUL_TRANS_API")
+SEOUL_DATA_PATH = Variable.get("SEOUL_DATA_PATH")
 local_tz = pendulum.timezone("Asia/Seoul")
 
 default_args = {
@@ -47,14 +50,14 @@ def get_current_tb():
     cursor.execute("use seoul") # sql문 수행
     cursor.execute("select * from trans")
     # csv파일 만들기
-    with open("get_data_mysql.csv", "w") as f:
+    with open(f"{SEOUL_DATA_PATH}/get_data_mysql.csv", "w") as f:
         csv_writer = csv.writer(f)
         csv_writer.writerow([i[0] for i in cursor.description])
         csv_writer.writerows(cursor)
         f.flush()
         cursor.close()
         conn.close()
-        logging.info("Saved data in text file: %s", "get_data_mysql.csv")
+        logging.info("Saved data : %s", "get_data_mysql.csv")
 
 
 # api로부터 데이터 받아오기
@@ -132,27 +135,21 @@ def extract_data(**context):
     raw.drop(columns={'건물면적(㎡)'},inplace=True)
 
     # 기존 테이블과 비교하여 새로운 데이터 추출
-    current_tb=pd.read_csv("get_data_mysql.csv")
+    current_tb=pd.read_csv(f"{SEOUL_DATA_PATH}/get_data_mysql.csv")
     current_tb=current_tb.astype({'접수연도':'str','자치구코드':'str','법정동코드':'str','계약일':'str','거래금액':'str'})
     current_tb.fillna('',inplace=True)
     current_tb['계약일']=list(map(lambda x : x.replace("-",""),current_tb['계약일']))
 
     tmp=pd.merge(raw.drop_duplicates(),current_tb,how='outer',indicator=True)
     new_data=tmp.query('_merge=="left_only"')
-
-    print(new_data)
     cnt=len(new_data)
-    print(cnt,'건 update')
+    logging.info('%d건 업데이트 확인',cnt)
 
-    if cnt != 0 :
-        new_data.drop(columns={'_merge'}).to_csv(f'new_data.csv')
-        return 'Insert.new_data'
-    
-    else:
-        return 'Skip.insert'
-    
+    new_data.drop(columns={'_merge'}).to_csv(f'{SEOUL_DATA_PATH}/new_data.csv',index=False)
+
+
 def check():
-    new_data=pd.read_csv(f'new_data.csv')
+    new_data=pd.read_csv(f'{SEOUL_DATA_PATH}/new_data.csv')
     cnt = len(new_data)
 
     if cnt != 0 :
@@ -162,8 +159,21 @@ def check():
 
 
 def insert_sql():
-    new_data=pd.read_csv(f'new_data.csv')
+    new_data=pd.read_csv(f'{SEOUL_DATA_PATH}/new_data.csv')
     print(new_data)
+
+    conn = MySqlHook.get_connection(conn_id="seoul-mysql") # 미리 정의한 mysql connection 적용 
+    username = conn.login
+    pw = conn.password
+    db_ip = conn.host
+    db_port = conn.port
+    db_name = conn.schema
+
+    db_connection = f"mysql+pymysql://{username}:{pw}@{db_ip}:{db_port}/{db_name}"
+    engine = create_engine(db_connection)
+
+    new_data.to_sql(con=engine, name='trans',if_exists='append',index=False)
+
     
 
 get_current_tb = PythonOperator(task_id='Get.current_data',
