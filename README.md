@@ -2,7 +2,8 @@
 서울시 내 거주지 검색 및 추천 웹사이트
 
 # ETL
-![image](https://github.com/soobeen-byul/Residential_Search_Web/assets/95599133/5365e0ed-1028-404c-9e08-b72e599d91c7)
+![image](https://github.com/soobeen-byul/Residential_Search_Web/assets/95599133/0b7d9f6d-1ebe-428f-8ee1-c2203794985c)
+
 
 ##### ✔ running info
 ```
