@@ -7,6 +7,7 @@
 ##### ✔ running info
 ```
 - running every day at 9AM (Asia/Seoul)
+- raw data api : https://data.seoul.go.kr/dataList/OA-21275/S/1/datasetView.do
 ```
 ##### ✔ task
 ```
