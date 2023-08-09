@@ -19,12 +19,11 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.mysql.hooks.mysql import MySqlHook
 from sqlalchemy import create_engine
 import pymysql
-# from airflow.providers.mysql.operators.mysql import MySqlOperator, MySqlHook
 
 
 API_KEY = Variable.get("SEOUL_TRANS_API")
 SEOUL_DATA_PATH = Variable.get("SEOUL_DATA_PATH")
-local_tz = pendulum.timezone("Asia/Seoul")
+local_tz = pendulum.timezone("")
 
 default_args = {
     'owner': 'sub',
