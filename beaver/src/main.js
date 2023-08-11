@@ -10,8 +10,11 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import {far} from '@fortawesome/free-regular-svg-icons'
 import {fab} from '@fortawesome/free-brands-svg-icons'
 
+import axios from 'axios'
+
 const app = createApp(App)
 app.use(router)  // 라우터 사용
+app.config.globalProperties.axios = axios;
 
 /* add icons to the library */
 library.add(

@@ -6,8 +6,9 @@ module.exports = defineConfig({
 		proxy: {
 			'/api' : {
 				target : 'http://localhost:8787', // Spring Boot Server
-				changeOrigin: true // cross origin 허용
-			}
+				changeOrigin: true, // cross origin 허용
+                secure: false 
+            }
 		}
 	}
 })

@@ -2,7 +2,8 @@
   <div class="background">
     <div style="padding-top: 200px;text-align: center;"><img alt="logo" src="../assets/beaver.png" width="150"></div>
     <h1 style="font-size: 70px; padding-top:40px; font-family:NanumSquareNeo; font-weight:700;text-align: center;"> 서울 비버의 내 집 마련</h1>
-      <div class ="row" style="padding-top: 20px;font-family: NanumSquareNeo; font-weight:500;padding-bottom: 10px;font-size: 20px;">
+    <button @click="submitBtn()">post하기</button> 
+    <div class ="row" style="padding-top: 20px;font-family: NanumSquareNeo; font-weight:500;padding-bottom: 10px;font-size: 20px;">
         <div class="col-md-2"></div>
         <div class="col-md">
           <div class="hstack gap-3" style="padding-bottom:20px;">
@@ -11,7 +12,7 @@
             </div>
             <span><font-awesome-icon icon="fa-solid fa-house" /></span>
             <div class="d-grid col-md-2">
-              <input type="text" class="form-control" placeholder="우편번호" v-model="postcode" style="background-color: rgba(255,255,255,0.2);">
+              <input type="text" class="form-control" placeholder="우편번호" v-model="postCode" style="background-color: rgba(255,255,255,0.2);">
             </div>
             <div class="col-md">
               <input type="text" class="form-control" placeholder="주소" v-model="address" style="background-color: rgba(255,255,255,0.2);">
@@ -20,34 +21,34 @@
           </div>
           <div class="container-fluid" style="padding:15px;background-color: rgba(234,234,234,0.6);text-align: center;">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="단독다가구" v-model="houseType">
               <label class="form-check-label" for="inlineRadio1">단독다가구</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="연립다세대" v-model="houseType">
               <label class="form-check-label" for="inlineRadio2">연립다세대</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="오피스텔" v-model="houseType">
               <label class="form-check-label" for="inlineRadio3">오피스텔</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="아파트" v-model="houseType">
               <label class="form-check-label" for="inlineRadio4">아파트</label>
             </div>
             <div class="hstack gap-3" style="padding-top:10px">
               <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ userdist }} 분 이하</label>
-              <input type="range" class="form-range" min="0" max = "180" step="10" id="distRange" v-model="userdist">
+              <input type="range" class="form-range" min="0" max = "180" step="10" id="distRange" v-model="userDist">
             </div>
             <div class="hstack gap-3">
               <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(usersale) }} 만원 이하</label>
-              <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="usersale">
+              <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="userSale">
             </div>
             <div class="input-group mb-3">
               <label for="areaRange" class="form-label col-md-3 mx-auto">건물 면적 (평)</label>
-              <input type="text" class="form-control" placeholder="최소 평수" >
+              <input type="text" class="form-control" placeholder="최소 평수" v-model="minArea">
               <span class="input-group-text"> ~ </span>
-              <input type="text" class="form-control" placeholder="최대 평수">
+              <input type="text" class="form-control" placeholder="최대 평수" v-model="maxArea">
             </div>
           </div>
         </div>
@@ -57,26 +58,20 @@
   </div>
   
 </template>
-
-<!-- <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script> -->
-
 <script>
 export default {
-  name: 'daumMap',
+  name: 'HelloWorld',
 
   data() {
     return {
-      postcode: '',
+      postCode: '',
       address: '',
-      userdist: 0,
-      usersale: 1000
+      houseType :'',
+      userDist: 0,
+      userSale: 1000,
+      minArea : 0,
+      maxArea : 0
+
     }
   },
 
@@ -87,6 +82,10 @@ export default {
               }
               
             },
+  },
+
+  mounted() {
+    this.load();
   },
 
   methods: {
@@ -123,11 +122,22 @@ export default {
             this.address = fullRoadAddr;
         }
       }).open()
+    },
+
+    load() {
+      this.axios.get('/api/hello').then(res => { 
+        console.log(res.data);
+      });
+    },
+
+    submitBtn() {
+        this.axios.post('/api/post', {postCode: this.postCode, address: this.address, houseType : this.houseType, userDist: this.userDist,
+                                      userSale: this.userSale, minArea : this.minArea, maxArea : this.maxArea}).then(res => { console.log(res);
+                                      }).catch(err => {console.log(err);});
     }
   }
 }
 </script>
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

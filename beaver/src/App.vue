@@ -6,14 +6,20 @@
 </template>
 
 <script>
-// import Header from './components/HeaderView.vue';
-
+// import HelloWorld from './components/HelloWorld.vue';
 
 export default {
   name: 'App',
-  // components: {
-    // Header/
-  // }
+  //  components: {
+  //    HelloWorld
+  //  },
+  //  mounted() {
+  //   request('http://localhost:8080/api/hello', function(error, response, body){
+  //     window.console.log('error',error);
+  //     window.console.log('statusCode',response && response.statusCode);
+  //     window.console.log('body',body);
+  //   })
+  //  }
 }
 </script>
 
