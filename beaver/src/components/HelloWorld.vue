@@ -1,7 +1,7 @@
 <template>
   <div class="background">
     <div style="padding-top: 200px;text-align: center;"><img alt="logo" src="../assets/beaver.png" width="150"></div>
-    <h1 style="font-size: 70px; padding-top:40px; font-family:NanumSquareNeo; font-weight:700;text-align: center;"> 서울 비버의 내 집 마련</h1>
+    <h1 style="font-size: 70px; padding-top:40px; font-family:NanumSquareNeo; font-weight:700;text-align: center;"> gg서울 비버의 내 집 마련</h1>
     <button @click="submitBtn()">post하기</button> 
     <div class ="row" style="padding-top: 20px;font-family: NanumSquareNeo; font-weight:500;padding-bottom: 10px;font-size: 20px;">
         <div class="col-md-2"></div>
@@ -37,11 +37,11 @@
               <label class="form-check-label" for="inlineRadio4">아파트</label>
             </div>
             <div class="hstack gap-3" style="padding-top:10px">
-              <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ userdist }} 분 이하</label>
+              <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ userDist }} 분 이하</label>
               <input type="range" class="form-range" min="0" max = "180" step="10" id="distRange" v-model="userDist">
             </div>
             <div class="hstack gap-3">
-              <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(usersale) }} 만원 이하</label>
+              <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(userSale) }} 만원 이하</label>
               <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="userSale">
             </div>
             <div class="input-group mb-3">
@@ -118,7 +118,7 @@ export default {
             }
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            this.postcode = data.zonecode; //5자리 새우편번호 사용
+            this.postCode = data.zonecode; //5자리 새우편번호 사용
             this.address = fullRoadAddr;
         }
       }).open()
