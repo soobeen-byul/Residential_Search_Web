@@ -15,7 +15,6 @@ import axios from 'axios'
 const app = createApp(App)
 app.use(router)  // 라우터 사용
 app.config.globalProperties.axios = axios;
-
 /* add icons to the library */
 library.add(
     fas,
