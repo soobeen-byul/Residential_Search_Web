@@ -2,7 +2,6 @@
   <div class="background">
     <div style="padding-top: 200px;text-align: center;"><img alt="logo" src="../assets/beaver.png" width="150"></div>
     <h1 style="font-size: 70px; padding-top:40px; font-family:NanumSquareNeo; font-weight:700;text-align: center;">서울 비버의 내 집 마련</h1>
-    <button @click="submitBtn()">post하기</button>
     <div class ="row" style="padding-top: 20px;font-family: NanumSquareNeo; font-weight:500;padding-bottom: 10px;font-size: 20px;">
         <div class="col-md-2"></div>
         <div class="col-md">
@@ -50,6 +49,7 @@
               <span class="input-group-text"> ~ </span>
               <input type="text" class="form-control" placeholder="최대 평수" v-model="maxArea">
             </div>
+            <button type="button" class="btn btn-secondary btn-block"  @click="submitBtn">조회하기</button>
           </div>
         </div>
         <div class="col-md-2"></div>
