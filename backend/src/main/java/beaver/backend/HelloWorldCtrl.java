@@ -19,4 +19,7 @@ public class HelloWorldCtrl {
     public String PostTest(@RequestBody String msg) {
         return "post success!!!"+msg;
     }
+
+    @GetMapping("/sqltest/{dt}")
+    public
 }
