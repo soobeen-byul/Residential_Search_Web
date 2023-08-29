@@ -41,7 +41,7 @@ public class Trans {
         this.거래금액 = 거래금액;
         this.층 = 층;
         this.건축년도 = 건축년도;
-        this.건물용도 = 건물용도;
+        this.건물용도 = 건물용도;kr
         this.주소 = 주소;
         this.평수= 평수;
     }

@@ -1,4 +1,5 @@
 package beaver.backend.repository;
+import beaver.backend.domain.Trans;
 import org.springframework.data.jpa.repository.JpaRepository;
-public class TransRepository extends JpaRepository<Trans, Long>{
+public interface TransRepository extends JpaRepository<Trans, Long>{
 }
