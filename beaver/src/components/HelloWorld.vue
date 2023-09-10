@@ -130,10 +130,16 @@ export default {
       });
     },
 
+    // submitBtn() {
+    //     this.axios.post('/api/post', {postCode: this.postCode, address: this.address, houseType : this.houseType, userDist: this.userDist,
+    //                                   userSale: this.userSale, minArea : this.minArea, maxArea : this.maxArea}).then(res => { console.log(res);
+    //                                   }).catch(err => {console.log(err);});
+    // }
+
     submitBtn() {
-        this.axios.post('/api/post', {postCode: this.postCode, address: this.address, houseType : this.houseType, userDist: this.userDist,
-                                      userSale: this.userSale, minArea : this.minArea, maxArea : this.maxArea}).then(res => { console.log(res);
-                                      }).catch(err => {console.log(err);});
+      this.axios.post('api/sqltest/1').then(res => {
+        console.log(res.data)
+      })
     }
   }
 }
