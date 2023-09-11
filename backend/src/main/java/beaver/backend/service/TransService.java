@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 public class TransService {
     private final TransRepository transRepository;
 
-
     public Trans findById(long id) {
         return transRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
