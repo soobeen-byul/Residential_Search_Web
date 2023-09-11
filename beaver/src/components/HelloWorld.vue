@@ -54,7 +54,10 @@
         </div>
         <div class="col-md-2"></div>
       </div>
-    
+      <div>
+          <p>접수연도: {{ responseData.접수연도 }}</p>
+          <p>자치구명: {{ responseData.자치구명 }}</p>
+      </div>
   </div>
   
 </template>
@@ -70,7 +73,8 @@ export default {
       userDist: 0,
       userSale: 1000,
       minArea : 0,
-      maxArea : 0
+      maxArea : 0,
+      responseData: {}
 
     }
   },
@@ -129,18 +133,20 @@ export default {
         console.log(res.data);
       });
     },
+    // Axios를 사용하여 데이터를 Spring Boot로 전송 // 전송이 성공하면 Spring Boot에서 받은 데이터를 처리
+    submitBtn() {const data = {postCode: this.postCode, address: this.address, houseType: this.houseType, userDist: this.userDist, userSale: this.userSale, minArea: this.minArea, maxArea: this.maxArea};
+                this.axios.post('/api/sqltest/1', data).then(res => {this.handleResponse(res.data);}).catch(err => {console.log(err);});},
 
+    handleResponse(responseData) {
+      this.responseData = responseData;
+      console.log(this.responseData);
+  }
     // submitBtn() {
-    //     this.axios.post('/api/post', {postCode: this.postCode, address: this.address, houseType : this.houseType, userDist: this.userDist,
-    //                                   userSale: this.userSale, minArea : this.minArea, maxArea : this.maxArea}).then(res => { console.log(res);
-    //                                   }).catch(err => {console.log(err);});
+    //   this.axios.post('api/sqltest/1').then(res => {
+    //     console.log(res.data)
+    //   })
     // }
-
-    submitBtn() {
-      this.axios.post('api/sqltest/1').then(res => {
-        console.log(res.data)
-      })
-    }
+   
   }
 }
 </script>
