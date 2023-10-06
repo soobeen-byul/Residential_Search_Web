@@ -4,15 +4,17 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+// import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import beaver.backend.SearchCriteria;
 import beaver.backend.domain.Trans;
-import beaver.backend.dto.TransResponse;
+// import beaver.backend.dto.Coordinates;
+import beaver.backend.dto.SearchCriteria;
+// import beaver.backend.service.AddressService;
+// import beaver.backend.model.TransResponse;
 import beaver.backend.service.TransService;
 import lombok.RequiredArgsConstructor;
 
@@ -46,4 +48,19 @@ public class HelloWorldCtrl {
         List<Trans> result = transService.searchTrans(criteria);
         return ResponseEntity.ok().body(result);
     }
+
+    // @RestController
+    // public class AddressController {
+
+    //     private final AddressService addressService;
+
+    //     public AddressController(AddressService addressService) {
+    //         this.addressService = addressService;
+    //     }
+
+    //     @GetMapping("/address")
+    //     public Coordinates address(){
+    //         return addressService.getCoordinate();
+    //     }
+    // }
 }

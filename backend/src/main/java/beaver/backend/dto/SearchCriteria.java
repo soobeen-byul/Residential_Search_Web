@@ -1,16 +1,17 @@
-package beaver.backend;
+package beaver.backend.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-
 
 
 @Getter
 @Setter
 public class SearchCriteria {
     // private Long id;
+
     private String houseType;
-    private Long userSale;
+    private Long minSale;
+    private Long maxSale;
     private Long minArea;
     private Long maxArea;
     private String postCode;

@@ -19,29 +19,50 @@
             <div ref="embed"></div>
           </div>
           <div class="container-fluid" style="padding:15px;background-color: rgba(234,234,234,0.6);text-align: center;">
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="단독다가구" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio1">단독다가구</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="연립다세대" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio2">연립다세대</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="오피스텔" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio3">오피스텔</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="아파트" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio4">아파트</label>
-            </div>
+            <!-- <div class ="row mb-3"> -->
+              <!-- <label for="houseRange" class="col-sm-2 col-form-label">건물유형</label> -->
+              <!-- <div class="col-sm-10"> -->
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="단독다가구" v-model="houseType">
+                  <label class="form-check-label" for="inlineRadio1">단독다가구</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="연립다세대" v-model="houseType">
+                  <label class="form-check-label" for="inlineRadio2">연립다세대</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="오피스텔" v-model="houseType">
+                  <label class="form-check-label" for="inlineRadio3">오피스텔</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="아파트" v-model="houseType">
+                  <label class="form-check-label" for="inlineRadio4">아파트</label>
+                </div> 
+              <!-- </div> -->
+            <!-- </div> -->
+            <!-- <div class ="row mb-3">
+              <label for="constRange" class="col-sm-2 col-form-label">건축년도</label>
+              <div class="col-sm-10">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="constRange" v-model="tfYear">
+                  <label class="form-check-label" for="flexCheckDefault">&nbsp;무관</label>
+                </div>
+                <div class="form-check form-check-inline" style="padding-top:10px" v-if="tfYear==false">
+                  <input type="text" class="form-control" placeholder="최소 금액" v-model="constYear">
+                </div>
+              </div>
+            </div> -->
             <div class="hstack gap-3" style="padding-top:10px">
               <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ userDist }} 분 이하</label>
-              <input type="range" class="form-range" min="0" max = "180" step="10" id="distRange" v-model="userDist">
+              <input type="range" class="form-range" min="0" max = "" step="10" id="distRange" v-model="userDist">
             </div>
-            <div class="hstack gap-3">
-              <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(userSale) }} 만원 이하</label>
-              <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="userSale">
+            <div class="input-group mb-3">
+              <!-- <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(userSale) }} 만원 이하</label>
+              <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="userSale"> -->
+              <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 (만원)</label>
+              <input type="text" class="form-control" placeholder="최소 금액" v-model="minSale">
+              <span class="input-group-text"> ~ </span>
+              <input type="text" class="form-control" placeholder="최대 금액" v-model="maxSale">
             </div>
             <div class="input-group mb-3">
               <label for="areaRange" class="form-label col-md-3 mx-auto">건물 면적 (평)</label>
@@ -55,8 +76,8 @@
         <div class="col-md-2"></div>
       </div>
       <div>
-          <p>접수연도: {{ responseData.접수연도 }}</p>
-          <p>자치구명: {{ responseData.자치구명 }}</p>
+          <!-- <p>접수연도: {{ responseData.접수연도 }}</p>
+          <p>자치구명: {{ responseData.자치구명 }}</p> -->
       </div>
   </div>
   
@@ -67,16 +88,24 @@ export default {
 
   data() {
     return {
+      nowYear : new Date().getFullYear(),
       postCode: '',
       address: '',
       houseType :'',
+      tfYear : true,
+      constYear: 0,
       userDist: 0,
-      userSale: 1000,
+      minSale: 1000,
+      maxSale: 1000000,
       minArea : 0,
       maxArea : 0,
       responseData: {}
 
     }
+  },
+
+  created() {
+    this.constYear = this.nowYear -1; // created 라이프사이클 훅에서 초기화
   },
 
   computed: {
@@ -134,10 +163,11 @@ export default {
       });
     },
     // Axios를 사용하여 데이터를 Spring Boot로 전송 // 전송이 성공하면 Spring Boot에서 받은 데이터를 처리
-    submitBtn() {const data = {postCode: this.postCode, address: this.address, houseType: this.houseType, userDist: this.userDist, userSale: this.userSale, minArea: this.minArea, maxArea: this.maxArea};
-                this.axios.post('/api/sqltest/1', data).then(res => {this.handleResponse(res.data);}).catch(err => {console.log(err);});},
+    submitBtn() {const data = {postCode: this.postCode, address: this.address, houseType: this.houseType, userDist: this.userDist, minSale: this.minSale, maxSale: this.maxSale, minArea: this.minArea, maxArea: this.maxArea};
+                this.axios.post('/api/search', data).then(res => {this.handleResponse(res.data);}).catch(err => {console.log(err);});},
 
     handleResponse(responseData) {
+      console.log(this.data);
       this.responseData = responseData;
       console.log(this.responseData);
   }
