@@ -1,9 +1,27 @@
 <template>
+  <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/" style="font-family:NanumSquareNeo; font-weight:700;">&nbsp;&nbsp;서울 비버의 내 집 마련</a>
+    <ul class="navbar-nav flex-row d-md-none">
+      <li class="nav-item text-nowrap">
+        <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle search">
+          <svg class="bi"><use xlink:href="#search"></use></svg>
+        </button>
+      </li>
+      <li class="nav-item text-nowrap">
+        <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <svg class="bi"><use xlink:href="#list"></use></svg>
+        </button>
+      </li>
+    </ul>
+    <div id="navbarSearch" class="navbar-search w-100 collapse">
+      <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
+    </div>
+  </header>
   <div class="d-flex flex-nowrap background">
     <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" style="width: 380px;">
       <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-body-emphasis text-decoration-none border-bottom">
         <img alt="logo" src="../assets/beaver.png" width="50" href="/">
-        <span style="font-size: 20px; font-family:NanumSquareNeo; font-weight:700;">&nbsp;&nbsp;서울 비버의 내 집 마련</span>
+        <span style="font-size: 20px; font-family:NanumSquareNeo; font-weight:700;">&nbsp;&nbsp;{{ this.$store.state.address }}</span>
       </a>
       <div class="list-group list-group-flush border-bottom scrollarea">
         <a href="#" class="list-group-item list-group-item-action active py-3 lh-sm" aria-current="true">
@@ -30,20 +48,7 @@
       </div>
     </div>
     <div class="col-md">
-      <div class="container-fluid" style="padding:15px;text-align: center;">
-        <div class="hstack gap-3" style="padding-bottom:20px;">
-        <div class="daummap d-grid col-md-3 mx-auto">
-          <button type="button" class="btn btn-secondary btn-block" @click="showApi">직장/학교 주소 검색하기</button>
-        </div>
-        <span><font-awesome-icon icon="fa-solid fa-house" /></span>
-        <div class="d-grid col-md-2">
-          <input type="text" class="form-control" placeholder="우편번호" v-model="this.$store.state.postCode" style="background-color: rgba(255,255,255,0.2);">
-        </div>
-        <div class="col-md">
-          <input type="text" class="form-control" placeholder="주소" v-model="this.$store.state.address" style="background-color: rgba(255,255,255,0.2);">
-        </div>
-        <div ref="embed"></div>
-      </div>
+      <div class="container-fluid" style="padding:20px;text-align: center;">
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="단독다가구" v-model="this.$store.state.houseType">
           <label class="form-check-label" for="inlineRadio1">단독다가구</label>
@@ -78,9 +83,31 @@
         </div>
         <button type="button" class="btn btn-secondary btn-block"  @click="submitBtn">조회하기</button>
       </div>
+      
+      <div class="b-example-divider b-example-vr"></div>
+      <ul class="nav nav-fill nav-justified nav-underline justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Active</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Dropdown</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Separated link</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
     </div>
-    <!-- <div class="b-example-divider b-example-vr"></div> -->
     
+
     <!-- <div>
         <ul v-if="Object.keys(this.$store.state.responseData).length > 0">
           <li v-for="(value, key) in this.$store.state.responseData" :key="key">{{ value }}</li>
@@ -88,6 +115,7 @@
         <p v-else>조회된 정보가 없습니다</p>
       </div> -->
   </div>
+
   
 </template>
 <script>
