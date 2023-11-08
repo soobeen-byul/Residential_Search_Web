@@ -31,7 +31,7 @@ public class TransService {
     public List<Trans> searchTrans(SearchCriteria criteria) {
 
     Coordinates coordinates = addressService.getCoordinate(criteria.getAddress());
-    Specification<Location> spec_loc = LocationSpecification.findByLocation(coordinates);
+    Specification<Location> spec_loc = LocationSpecification.findByLocation(coordinates,criteria);
     List<Location> criteria_loc = locationRepository.findAll(spec_loc);
     
     Specification<Trans> spec_trans = TransSpecification.findByCriteria(criteria,criteria_loc);

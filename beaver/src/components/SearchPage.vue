@@ -66,8 +66,8 @@
           <label class="form-check-label" for="inlineRadio4">아파트</label>
         </div> 
         <div class="hstack gap-3" style="padding-top:10px">
-          <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ this.$store.state.userDist }} 분 이하</label>
-          <input type="range" class="form-range" min="0" max = "" step="10" id="distRange" v-model="this.$store.state.userDist">
+          <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 거리 : {{ this.$store.state.userDist }} km 이하</label>
+          <input type="range" class="form-range" min="0" max = "40" step="1" id="distRange" v-model="this.$store.state.userDist">
         </div>
         <div class="input-group mb-3">
           <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 (만원)</label>
@@ -81,30 +81,63 @@
           <span class="input-group-text"> ~ </span>
           <input type="text" class="form-control" placeholder="최대 평수" v-model="this.$store.state.maxArea">
         </div>
-        <button type="button" class="btn btn-secondary btn-block"  @click="submitBtn">조회하기</button>
+        <button type="button" class="btn btn-secondary btn-block"  @click="fetchDataAndProcessData">조회하기</button>
       </div>
       
       <div class="b-example-divider b-example-vr"></div>
       <ul class="nav nav-fill nav-justified nav-underline justify-content-center">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Active</a>
+          <a class="nav-link" :class="{ 'active': selectedPage === 'avg' }" @click="this.selectedPage = 'avg'">행정동별 거래금액 평균</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Dropdown</a>
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">행정동별 거래 데이터</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Separated link</a></li>
+            <li v-for="item in regionData" :key="item.id">
+              <a class="dropdown-item" href="#">{{item.행정동명}}</a>
+            </li>
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          <a class="nav-link" :class="{ 'active': selectedPage === 'all' }" @click="this.selectedPage = 'all'">전체 거래 데이터 확인하기</a>
         </li>
       </ul>
+      <!-- 페이지 내용을 선택한 페이지에 따라 변경 -->
+      <div v-if="this.selectedPage === 'avg'" style="margin: 20px 0 20px 20px;">
+        <div>
+          <div class="row">
+            <div class="col-md-4" v-for="(regionData, regionName) in averagedData" :key="regionName">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">{{ regionName }}</h5>
+                  <p class="card-text">평균 거래금액: {{ regionData }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else-if="this.selectedPage === 'all'">
+        <h2>전체 거래 데이터</h2>
+        <div v-for="(regionData, regionName) in groupedData" :key="regionName">
+            <h3>{{ regionName }}</h3>
+            <ul>
+                <li v-for="item in regionData" :key="item.id">
+                    {{ item.행정동명 }} - {{ item.건물명 }} - {{ item.거래금액 }}
+                </li>
+            </ul>
+        </div>
+      </div>
+      <div v-else>
+        <h2>{{ this.selectedPage }}</h2>
+      </div>
+      
+      <!-- <div>
+        <ul v-if="Object.keys(this.$store.state.responseData).length > 0">
+          <li v-for="(value, key) in this.$store.state.responseData" :key="key">{{ value }}</li>
+        </ul>
+        <p v-else>조회된 정보가 없습니다</p>
+      </div> -->
+  
     </div>
     
 
@@ -124,13 +157,73 @@ export default {
 
   data() {
     return {
+      selectedPage: 'avg',
+      groupedData: {},
+      averagedData: {}
     }
   },
 
   mounted() {
+    // this.groupData();
+    // this.calculateAverage();
+  },
+  
+  computed: {
+    
+
   },
 
   methods: {
+    async submitBtn() { 
+                  await this.$store.dispatch('fetchDataFromServer');
+
+                  // this.$router.push('/search');
+                  this.groupData();
+                  this.calculateAverage();
+                },
+    
+    async groupData() {
+      const groupedData = {};
+
+      for (const key in this.$store.state.responseData) {
+        const item = this.$store.state.responseData[key];
+        const groupKey = `${item.자치구명} ${item.행정동명}`;
+        if (!groupedData[groupKey]) {groupedData[groupKey] = [];}
+        groupedData[groupKey].push(item);
+      };
+
+      this.groupedData=groupedData;
+    },
+
+    async calculateAverage() {
+      const averagedData = {}; // 객체로 변경
+
+    for (const key in this.groupedData) {
+      const group = this.groupedData[key];
+      const sum = group.reduce((total, item) => total + item.거래금액, 0);
+      const average = sum / group.length;
+      const roundedAverage = parseFloat(average.toFixed(2)); // 반올림 후 숫자로 변환
+      averagedData[key] = roundedAverage;
+    }
+
+    this.averagedData = averagedData;
+    },
+
+    async fetchDataAndProcessData() {
+      // First, fetch data from the server
+      await this.$store.dispatch('fetchDataFromServer');
+
+      // After data is loaded, call groupData and calculateAverage
+      this.groupData();
+      this.calculateAverage();
+    }
+
+
+  },
+
+  created() {
+    // Call fetchDataAndProcessData when the page is created
+    this.fetchDataAndProcessData();
   }
 }
 </script>
@@ -154,7 +247,7 @@ a {
 }
 
 .background{
-  height: 100vh;
+  /* height: 100vh; */
   /* overflow: hidden; */
   /* background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(248,213,214,1) 0%, rgba(243,242,229,1) 90% ); */
   background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(226,240,254,1) 0%, rgba(255,247,228,1) 90% );

@@ -18,8 +18,10 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
+    "chart.js": "^4.4.0",
     "pinia": "^2.1.4",
     "vue": "^3.3.4",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.4",
     "vuex": "^4.0.0"
   },

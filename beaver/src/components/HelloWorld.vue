@@ -53,8 +53,8 @@
               </div>
             </div> -->
             <div class="hstack gap-3" style="padding-top:10px">
-              <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ this.$store.state.userDist }} 분 이하</label>
-              <input type="range" class="form-range" min="0" max = "" step="10" id="distRange" v-model="this.$store.state.userDist">
+              <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 거리 : {{ this.$store.state.userDist }} km 이하</label>
+              <input type="range" class="form-range" min="0" max = "40" step="1" id="distRange" v-model="this.$store.state.userDist">
             </div>
             <div class="input-group mb-3">
               <!-- <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(userSale) }} 만원 이하</label>
