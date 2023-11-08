@@ -11,50 +11,76 @@
             </div>
             <span><font-awesome-icon icon="fa-solid fa-house" /></span>
             <div class="d-grid col-md-2">
-              <input type="text" class="form-control" placeholder="우편번호" v-model="postCode" style="background-color: rgba(255,255,255,0.2);">
+              <input type="text" class="form-control" placeholder="우편번호" v-model="this.$store.state.postCode" style="background-color: rgba(255,255,255,0.2);">
             </div>
             <div class="col-md">
-              <input type="text" class="form-control" placeholder="주소" v-model="address" style="background-color: rgba(255,255,255,0.2);">
+              <input type="text" class="form-control" placeholder="주소" v-model="this.$store.state.address" style="background-color: rgba(255,255,255,0.2);">
             </div>
             <div ref="embed"></div>
           </div>
           <div class="container-fluid" style="padding:15px;background-color: rgba(234,234,234,0.6);text-align: center;">
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="단독다가구" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio1">단독다가구</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="연립다세대" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio2">연립다세대</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="오피스텔" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio3">오피스텔</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="아파트" v-model="houseType">
-              <label class="form-check-label" for="inlineRadio4">아파트</label>
-            </div>
+            <!-- <div class ="row mb-3"> -->
+              <!-- <label for="houseRange" class="col-sm-2 col-form-label">건물유형</label> -->
+              <!-- <div class="col-sm-10"> -->
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="단독다가구" v-model="this.$store.state.houseType">
+                  <label class="form-check-label" for="inlineRadio1">단독다가구</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="연립다세대" v-model="this.$store.state.houseType">
+                  <label class="form-check-label" for="inlineRadio2">연립다세대</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="오피스텔" v-model="this.$store.state.houseType">
+                  <label class="form-check-label" for="inlineRadio3">오피스텔</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="아파트" v-model="this.$store.state.houseType">
+                  <label class="form-check-label" for="inlineRadio4">아파트</label>
+                </div> 
+              <!-- </div> -->
+            <!-- </div> -->
+            <!-- <div class ="row mb-3">
+              <label for="constRange" class="col-sm-2 col-form-label">건축년도</label>
+              <div class="col-sm-10">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="constRange" v-model="tfYear">
+                  <label class="form-check-label" for="flexCheckDefault">&nbsp;무관</label>
+                </div>
+                <div class="form-check form-check-inline" style="padding-top:10px" v-if="tfYear==false">
+                  <input type="text" class="form-control" placeholder="최소 금액" v-model="constYear">
+                </div>
+              </div>
+            </div> -->
             <div class="hstack gap-3" style="padding-top:10px">
-              <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 시간 : {{ userDist }} 분 이하</label>
-              <input type="range" class="form-range" min="0" max = "180" step="10" id="distRange" v-model="userDist">
+              <label for="distRange" class="form-label col-md-3 mx-auto">통근/통학 거리 : {{ this.$store.state.userDist }} km 이하</label>
+              <input type="range" class="form-range" min="0" max = "40" step="1" id="distRange" v-model="this.$store.state.userDist">
             </div>
-            <div class="hstack gap-3">
-              <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(userSale) }} 만원 이하</label>
-              <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="userSale">
+            <div class="input-group mb-3">
+              <!-- <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 : {{ currency(userSale) }} 만원 이하</label>
+              <input type="range" class="form-range" min="1000" max="1000000" step="1000" id="saleRange" v-model="userSale"> -->
+              <label for="saleRange" class="form-label col-md-3 mx-auto">매매가 (만원)</label>
+              <input type="text" class="form-control" placeholder="최소 금액" v-model="this.$store.state.minSale">
+              <span class="input-group-text"> ~ </span>
+              <input type="text" class="form-control" placeholder="최대 금액" v-model="this.$store.state.maxSale">
             </div>
             <div class="input-group mb-3">
               <label for="areaRange" class="form-label col-md-3 mx-auto">건물 면적 (평)</label>
-              <input type="text" class="form-control" placeholder="최소 평수" v-model="minArea">
+              <input type="text" class="form-control" placeholder="최소 평수" v-model="this.$store.state.minArea">
               <span class="input-group-text"> ~ </span>
-              <input type="text" class="form-control" placeholder="최대 평수" v-model="maxArea">
+              <input type="text" class="form-control" placeholder="최대 평수" v-model="this.$store.state.maxArea">
             </div>
             <button type="button" class="btn btn-secondary btn-block"  @click="submitBtn">조회하기</button>
           </div>
         </div>
         <div class="col-md-2"></div>
       </div>
-    
+      <!-- <div>
+        <ul v-if="Object.keys(this.$store.state.responseData).length > 0">
+          <li v-for="(value, key) in this.$store.state.responseData" :key="key">{{ value }}</li>
+        </ul>
+        <p v-else>조회된 정보가 없습니다</p>
+      </div> -->
   </div>
   
 </template>
@@ -64,15 +90,11 @@ export default {
 
   data() {
     return {
-      postCode: '',
-      address: '',
-      houseType :'',
-      userDist: 0,
-      userSale: 1000,
-      minArea : 0,
-      maxArea : 0
-
     }
+  },
+
+  created() {
+    this.constYear = this.nowYear -1; 
   },
 
   computed: {
@@ -118,8 +140,8 @@ export default {
             }
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            this.postCode = data.zonecode; //5자리 새우편번호 사용
-            this.address = fullRoadAddr;
+            this.$store.state.postCode = data.zonecode; //5자리 새우편번호 사용
+            this.$store.state.address = fullRoadAddr;
         }
       }).open()
     },
@@ -129,12 +151,16 @@ export default {
         console.log(res.data);
       });
     },
+    // Axios를 사용하여 데이터를 Spring Boot로 전송 // 전송이 성공하면 Spring Boot에서 받은 데이터를 처리
+    submitBtn() { this.$store.dispatch('fetchDataFromServer');
+                  this.$router.push('/search');},
 
-    submitBtn() {
-        this.axios.post('/api/post', {postCode: this.postCode, address: this.address, houseType : this.houseType, userDist: this.userDist,
-                                      userSale: this.userSale, minArea : this.minArea, maxArea : this.maxArea}).then(res => { console.log(res);
-                                      }).catch(err => {console.log(err);});
-    }
+  //   handleResponse(responseData) {
+  //     this.responseData = responseData;
+  //     console.log(this.responseData);
+  // }
+
+   
   }
 }
 </script>
@@ -160,7 +186,7 @@ a {
 
 .background{
   height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(248,213,214,1) 0%, rgba(243,242,229,1) 90% ); */
   background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(226,240,254,1) 0%, rgba(255,247,228,1) 90% );
   /* background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% ); */
