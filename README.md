@@ -6,8 +6,12 @@
 ![image](https://github.com/soobeen-byul/Residential_Search_Web/assets/95599133/7848e85b-2b29-4166-9ac3-ca1c769e94d1)
 
 
+# Arichitecture
+![image](https://github.com/soobeen-byul/Residential_Search_Web/assets/95599133/0294d558-07de-42fa-a890-15445c3f8b19)
 
-# ETL
+
+
+# ETL Workflow
 ![image](https://github.com/soobeen-byul/Residential_Search_Web/assets/95599133/0b7d9f6d-1ebe-428f-8ee1-c2203794985c)
 
 
