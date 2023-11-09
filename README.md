@@ -23,7 +23,7 @@
 ##### ✔ task
 ```
 - step-1-extract : 서울시 부동산 실거래가 정보 api로부터 데이터 추출
-- step-2-transform : 필요 column 추출 후, DB에 저장되어있는 기존 데이터와 비교하여 업데이트된 데이터 확인
+- step-2-transform : 필요 column 추출 및 데이터 가공, DB에 저장되어있는 기존 데이터와 비교하여 업데이트된 데이터 확인
 - step-3-load : 추가된 데이터 확인 시, DB에 새로운 데이터 적재
 ```
 
