@@ -26,9 +26,9 @@ SEOUL_DATA_PATH = Variable.get("SEOUL_DATA_PATH")
 local_tz = pendulum.timezone("Asia/Seoul")
 
 default_args = {
-    'owner': 'sub',
+    'owner': "soobeen",
     'depends_on_past': False,
-    'start_date': datetime(2023, 8, 8, tzinfo=local_tz),
+    'start_date': datetime(2023, 11, 10, tzinfo=local_tz),
     'retries': 0,
 }
 
@@ -93,10 +93,12 @@ def extract_data(**context):
     name_list = transfer_data['name']
 
     raw=pd.DataFrame(row_list, columns=name_list)[['ACC_YEAR','SGG_CD','SGG_NM','BJDONG_CD','BJDONG_NM','LAND_GBN',
-                                            'LAND_GBN_NM','BONBEON','BUBEON','BLDG_NM','DEAL_YMD', 'OBJ_AMT','HOUSE_TYPE','BLDG_AREA']]
+                                            'LAND_GBN_NM','BONBEON','BUBEON','BLDG_NM','DEAL_YMD','FLOOR','BUILD_YEAR',
+                                            'OBJ_AMT','HOUSE_TYPE','BLDG_AREA']]
 
-    raw.rename(columns={'ACC_YEAR':'접수연도','SGG_CD':'자치구코드','SGG_NM':'자치구명','BJDONG_CD':'법정동코드','BJDONG_NM':'법정동명','LAND_GBN':'지번구분',
-    'LAND_GBN_NM':'지번구분명','BONBEON':'본번','BUBEON':'부번','BLDG_NM':'건물명','DEAL_YMD':'계약일','OBJ_AMT':'거래금액','HOUSE_TYPE':'건물용도','BLDG_AREA':'건물면적(㎡)'},inplace=True)
+    raw.rename(columns={'ACC_YEAR':'접수연도','SGG_CD':'자치구코드','SGG_NM':'자치구명','BJDONG_CD':'법정동코드','BJDONG_NM':'법정동명',
+                        'LAND_GBN':'지번구분','LAND_GBN_NM':'지번구분명','BONBEON':'본번','BUBEON':'부번','BLDG_NM':'건물명','DEAL_YMD':'계약일',
+                        'FLORR':'층','BUILD_YEAR':'건축년도','OBJ_AMT':'거래금액','HOUSE_TYPE':'건물용도','BLDG_AREA':'건물면적(㎡)'},inplace=True)
 
     raw=raw.astype({'건물면적(㎡)':'float'})
 
@@ -131,16 +133,19 @@ def extract_data(**context):
     raw.drop(columns={'지번구분','지번구분명','본번','부번'},inplace=True)
     raw['주소']=address
     raw['평수']=round(raw['건물면적(㎡)']*0.3025,1)
+
     raw.drop(columns={'건물면적(㎡)'},inplace=True)
 
     # 기존 테이블과 비교하여 새로운 데이터 추출
     current_tb=pd.read_csv(f"{SEOUL_DATA_PATH}/get_data_mysql.csv")
+    current_tb.drop(columns={'id','지역코드'},inplace=True)
     current_tb=current_tb.astype({'접수연도':'str','자치구코드':'str','법정동코드':'str','계약일':'str','거래금액':'str'})
     current_tb.fillna('',inplace=True)
     current_tb['계약일']=list(map(lambda x : x.replace("-",""),current_tb['계약일']))
 
     tmp=pd.merge(raw.drop_duplicates(),current_tb,how='outer',indicator=True)
     new_data=tmp.query('_merge=="left_only"')
+    new_data['지역코드']=new_data['자치구코드']+new_data['법정동코드']
     cnt=len(new_data)
     logging.info('%d건 업데이트 확인',cnt)
 
