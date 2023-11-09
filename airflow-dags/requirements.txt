@@ -1,6 +1,0 @@
-pandas
-beautifulsoup4
-mysql-connector-python
-mysqlclient
-apache-airflow-providers-mysql
-pymysql
